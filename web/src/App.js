@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
-import SignIn from './pages/SignIn'
-import { apiBaseUrl } from './config/app'
+import { Route, Link } from 'react-router-dom'
+import Featured from './container/Featured.js'
+import About from './container/About.js'
+import Article from './container/Article.js'
 import sc2 from 'sc2-sdk'
+import './Custom.css'
 
 class App extends Component {
   constructor(props) {
@@ -13,42 +16,40 @@ class App extends Component {
         app: 'yabami',
         callbackURL: 'http://localhost:3000',
         accessToken: 'access_token',
-        scope: ['vote', 'comment'],
+        scope: ['vote', 'comment']
       })
     }
   }
 
   async componentDidMount() {
-    const { user } = this.state
-    if (user) {
-      const idToken = await user.getIdToken()
-      await fetch(`${apiBaseUrl}/users`, {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify({
-          idToken: idToken,
-        })
-      })
-    }
-  }
-
-  handleLogin = e => {
-    const { api } = this.state
-    e.preventDefault()
-    window.location.href = api.getLoginURL()
-  }
-
-  handleSignOut = () => {
+    // const { api } = this.state
+    // const res = await api.me
+    // console.log(JSON.stringify(res))
   }
 
   render() {
-    const { user, result } = this.state
-    return user ? (
-      <p>sign in</p>
-    ) : (
-      <SignIn handleLogin={this.handleLogin}/>
+    return (
+      <div className="App">
+        <Route exact path="/" component={Featured}/>
+        <Route exact path="/about" component={About}/>
+        <Route exact path="/article" component={Article}/>
+      </div>
     )
   }
 }
 
 export default App
+
+
+// handleLogin = e => {
+//   const { api } = this.state
+//   e.preventDefault()
+//   window.location.href = api.getLoginURL()
+// }
+// createList = async () => {
+//   let accessToken = new URLSearchParams(document.location.search).get(
+//     'access_token'
+//   )
+//   console.log(accessToken)
+//   await test(accessToken, 'test')
+// }
