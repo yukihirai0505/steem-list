@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import Featured from './container/Featured.js'
 import About from './container/About.js'
 import Article from './container/Article.js'
+import User from './container/User.js'
+import GenericNotFound from './container/GenericNotFound.js'
 import sc2 from 'sc2-sdk'
 import './Custom.css'
 
@@ -30,9 +32,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Route exact path="/" component={Featured}/>
-        <Route exact path="/about" component={About}/>
-        <Route exact path="/article" component={Article}/>
+        <Switch>
+          <Route exact path="/" component={Featured}/>
+          <Route exact path="/about" component={About}/>
+          <Route exact path="/article" component={Article}/>
+          <Route path='/@*' component={User}/>
+          <Route component={GenericNotFound}/>
+        </Switch>
       </div>
     )
   }
