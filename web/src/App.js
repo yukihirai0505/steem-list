@@ -4,7 +4,6 @@ import Home from './container/Home.js'
 import User from './container/User.js'
 import GenericNotFound from './container/GenericNotFound.js'
 import { api } from './config/app'
-import { createList } from './utils/api'
 import './Custom.css'
 import { Cookie } from './utils/cookie'
 import { createBrowserHistory } from 'history'
@@ -26,21 +25,11 @@ class App extends Component {
     if (!username && isLogin) {
       const accessToken = Cookie.get('auth')
       const res = await api(accessToken).me()
-      console.log(await createList('hogehoge'))
       this.setUserInfo(res._id)
     }
   }
 
   async componentDidMount() {
-    /*
-   - routing
-       - /@username
-       - /@username/list-name
-       - /@username/list-name/members
-   - api
-   - show timeline
-   - vote & comment to content
-     */
     const urlParams = new URLSearchParams(document.location.search)
     const accessToken = urlParams.get('access_token')
     // let expiresIn = urlParams.get('expires_in')
@@ -56,7 +45,7 @@ class App extends Component {
 
   setUserInfo = username => {
     this.setState({
-      username,
+      username: `@${username}`,
       isLogin: true
     })
   }
@@ -77,14 +66,14 @@ class App extends Component {
   }
 
   render() {
-    const { isLogin } = this.state
+    const { username, isLogin } = this.state
     return (
       <div className="App">
         <Switch>
           <Route
             exact
             path="/"
-            render={props => <Home {...props} isLogin={isLogin} handleLogin={this.handleLogin}
+            render={props => <Home {...props} isLogin={isLogin} username={username} handleLogin={this.handleLogin}
                                    handleLogout={this.handleLogout}/>}
           />
           <Authenticate>

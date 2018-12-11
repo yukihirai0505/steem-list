@@ -30,7 +30,7 @@ export const createList = async listName => {
   })
 }
 
-export const removeList = async (accessToken, listId) => {
+export const removeList = async listId => {
   return postRequest('remove-list', {
     listId
   })
