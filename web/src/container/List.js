@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { getListMembers, addListMember, removeListMember } from '../utils/api'
 import { Client } from 'dsteem'
+import { Cookie } from '../utils/cookie'
+import { api } from '../config/app'
 
 const client = new Client('https://api.steemit.com')
 
@@ -12,7 +14,20 @@ class List extends Component {
     this.state = {
       timeline: [],
       members: [],
-      newMemberName: ''
+      newMemberName: '',
+      username: undefined,
+      isLogin: Cookie.get('auth') !== null
+    }
+  }
+
+  async componentWillMount() {
+    const { username, isLogin } = this.state
+    if (!username && isLogin) {
+      const res = await api.me()
+      this.setState({
+        username: `@${res._id}`,
+        isLogin: true
+      })
     }
   }
 
@@ -24,9 +39,12 @@ class List extends Component {
     const { location, match } = this.props
     const { name, listId } = match.params
     if (listId) {
-      this.setState({
-        members: (await getListMembers(listId)).data
-      })
+      const members = (await getListMembers(name, listId)).data
+      if (Array.isArray(members)) {
+        this.setState({
+          members
+        })
+      }
     }
     await this.fetchTimeline()
   }
@@ -70,10 +88,14 @@ class List extends Component {
   }
 
   render() {
-    const { members, newMemberName, timeline } = this.state
+    const { username, members, newMemberName, timeline } = this.state
+    const { match } = this.props
+    const { name } = match.params
+    const isMe = name === username
     return (
       <main>
         <p>List Members</p>
+        {isMe &&
         <form action="#" onSubmit={e => this.addListMember(e)}>
           Add Member:{' '}
           @<input
@@ -83,12 +105,13 @@ class List extends Component {
         />
           <input type="submit" value="create"/>
         </form>
+        }
         <ul>
           {members.map((member, key) => {
             const listId = member[0]
             const username = member[1]
             return (
-              <li key={key}>{username} <a onClick={() => this.removeListMember(username)}>x</a></li>
+              <li key={key}>{username} {isMe && <a onClick={() => this.removeListMember(username)}>x</a>}</li>
             )
           })}
         </ul>

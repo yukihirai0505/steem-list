@@ -4,13 +4,13 @@ const baseUrl = `https://script.google.com/macros/s/AKfycbwpr0c-AU1ANhlmCVk0FkFA
 
 export const getList = async username => {
   const response = await fetch(
-    `${baseUrl}?action=show-all-list&param=${username}`
+    `${baseUrl}?action=show-all-list&username=${username}`
   )
   return await response.json()
 }
 
-export const getListMembers = async id => {
-  const response = await fetch(`${baseUrl}?action=show-list-member&param=${id}`)
+export const getListMembers = async (username, listId) => {
+  const response = await fetch(`${baseUrl}?action=show-list-member&username=${username}&listId=${listId}`)
   return await response.json()
 }
 

@@ -7,21 +7,26 @@ import {
 } from './sheet'
 
 global.doGet = e => {
-  const { action, param } = e.parameter
+  const { action } = e.parameter
   let response = {}
   switch (action) {
     case 'show-all-list': {
+      const { username } = e.parameter
       response = listSheet
         .getRange(2, 1, listSheet.getLastRow(), 3)
         .getValues()
-        .filter(data => data[1] === param)
+        .filter(data => data[1] === username)
       break
     }
     case 'show-list-member': {
-      response = listMemberSheet
-        .getRange(2, 1, listMemberSheet.getLastRow(), 3)
-        .getValues()
-        .filter(data => data[0] === param)
+      const { username, listId } = e.parameter
+      const listIndex = findByListIdAndUserName(listId, username)
+      if (listIndex !== undefined) {
+        response = listMemberSheet
+          .getRange(2, 1, listMemberSheet.getLastRow(), 3)
+          .getValues()
+          .filter(data => data[0] === listId)
+      }
       break
     }
     default:
@@ -50,21 +55,36 @@ global.doPost = e => {
         const listIndex = findByListIdAndUserName(listId, loginUser)
         if (listIndex !== undefined) {
           listSheet.deleteRow(listIndex + 2)
+          listMemberSheet
+            .getRange(2, 1, listMemberSheet.getLastRow(), 3)
+            .getValues()
+            .forEach((member, i) => {
+              if (member[0] === listId) {
+                listMemberSheet.deleteRow(i + 2)
+              }
+            })
         }
         break
       }
       case 'add-list-member': {
         const { listId, username } = params
         const listIndex = findByListIdAndUserName(listId, loginUser)
-        if (listIndex) {
+        if (listIndex !== undefined) {
           listMemberSheet.appendRow([listId, username])
+          response = { result: true }
+        } else {
+          params.loginUser = loginUser
+          response = {
+            result: false,
+            params
+          }
         }
         break
       }
       case 'remove-list-member': {
         const { listId, username } = params
         const listIndex = findByListIdAndUserName(listId, loginUser)
-        if (listIndex) {
+        if (listIndex !== undefined) {
           const listMemberIndex = findListMemberByListIdAndUserName(listId, username)
           if (listMemberIndex !== undefined) {
             listMemberSheet.deleteRow(listMemberIndex + 2)

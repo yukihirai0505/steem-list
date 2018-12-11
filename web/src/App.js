@@ -36,7 +36,7 @@ class App extends Component {
       Cookie.set('auth', accessToken, 1)
       this.setUserInfo(username)
       this.props.history.push({
-        pathname: `/`
+        pathname: `/#/${username}`
       })
     }
   }

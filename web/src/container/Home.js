@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getList, removeList, createList } from '../utils/api'
 import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 
 class Home extends Component {
   static propTypes = {
@@ -15,7 +16,8 @@ class Home extends Component {
     super(props)
     this.state = {
       list: [],
-      newListName: ''
+      newListName: '',
+      doneFirstFetchList: false
     }
   }
 
@@ -24,12 +26,17 @@ class Home extends Component {
   }
 
   async fetchList() {
-    const { list } = this.state
+    const { doneFirstFetchList } = this.state
     const { username } = this.props
-    if (username && list.length === 0) {
+    if (username) {
       this.setState({
         list: (await getList(username)).data
       })
+      if (!doneFirstFetchList) {
+        this.setState({
+          doneFirstFetchList: true
+        })
+      }
     }
   }
 
@@ -52,9 +59,11 @@ class Home extends Component {
   }
 
   render() {
-    const { list, newListName } = this.state
-    const { isLogin, handleLogin, handleLogout } = this.props
-    this.fetchList()
+    const { list, newListName, doneFirstFetchList } = this.state
+    const { isLogin, handleLogin, handleLogout, username } = this.props
+    if (!doneFirstFetchList && username) {
+      this.fetchList()
+    }
     return (
       <main>
         <h1>Steem List</h1>
@@ -78,7 +87,7 @@ class Home extends Component {
                 const listName = row[2]
                 return (
                   <li key={listId}>
-                    <a href={`/#/${username}/${listId}`}>{listName}{' '}</a>
+                    <Link to={`/${username}/${listId}`}>{listName}{' '}</Link>
                     <a href="" onClick={(e) => this.removeList(e, listId)}>
                       x
                     </a>
