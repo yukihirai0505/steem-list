@@ -15,9 +15,9 @@ class Authenticate extends Component {
   render() {
     const { isLogin } = this.state
     return isLogin ? (
-      <Route children={this.props.children} />
+      <Route children={this.props.children}/>
     ) : (
-      (window.location = api().getLoginURL())
+      (window.location = api.getLoginURL())
     )
   }
 }

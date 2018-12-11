@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import Home from './container/Home.js'
 import User from './container/User.js'
 import List from './container/List.js'
@@ -22,8 +22,7 @@ class App extends Component {
   async componentWillMount() {
     const { username, isLogin } = this.state
     if (!username && isLogin) {
-      const accessToken = Cookie.get('auth')
-      const res = await api(accessToken).me()
+      const res = await api.me()
       this.setUserInfo(res._id)
     }
   }
@@ -50,8 +49,7 @@ class App extends Component {
   }
 
   handleLogin = e => {
-    //e.preventDefault()
-    window.location.href = api().getLoginURL()
+    window.location.href = api.getLoginURL()
   }
 
   handleLogout = e => {
@@ -84,9 +82,9 @@ class App extends Component {
           />
           <Authenticate>
             <Switch>
-              <Route path="/:name(@[a-zA-Z0-9-_\.]+)/:listId" component={List} />
-              <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User} />
-              <Route component={GenericNotFound} />
+              <Route path="/:name(@[a-zA-Z0-9-_\.]+)/:listId" component={List}/>
+              <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User}/>
+              <Route component={GenericNotFound}/>
             </Switch>
           </Authenticate>
         </Switch>

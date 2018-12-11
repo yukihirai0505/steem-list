@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Cookie } from '../utils/cookie'
-import { api } from '../config/app'
 import { getListMembers, addListMember, removeListMember } from '../utils/api'
+import { Client } from 'dsteem'
+
+const client = new Client('https://api.steemit.com')
 
 class List extends Component {
 
@@ -27,6 +28,25 @@ class List extends Component {
         members: (await getListMembers(listId)).data
       })
     }
+    await this.fetchTimeline()
+  }
+
+  async fetchTimeline() {
+    const { members } = this.state
+    members.forEach(async member => {
+      const query = {
+        tag: member[1].replace('@', ''),
+        limit: 10
+      }
+      const result = await client.database
+        .getDiscussions('blog', query)
+      const { timeline } = this.state
+      this.setState({
+        timeline: timeline.concat(result).sort((a, b) => {
+          return new Date(b.created).getTime() - new Date(a.created).getTime()
+        })
+      })
+    })
   }
 
   async addListMember(e) {
@@ -50,10 +70,9 @@ class List extends Component {
   }
 
   render() {
-    const { members, newMemberName } = this.state
+    const { members, newMemberName, timeline } = this.state
     return (
       <main>
-        <h1>yay</h1>
         <p>List Members</p>
         <form action="#" onSubmit={e => this.addListMember(e)}>
           Add Member:{' '}
@@ -70,6 +89,19 @@ class List extends Component {
             const username = member[1]
             return (
               <li key={key}>{username} <a onClick={() => this.removeListMember(username)}>x</a></li>
+            )
+          })}
+        </ul>
+        <p>Timeline</p>
+        <ul>
+          {timeline.map((post, key) => {
+            /**
+             const json = JSON.parse(post.json_metadata);
+             const image = json.image ? json.image[0] : '';
+             */
+            console.log(post)
+            return (
+              <li key={key}>{post.title} by {post.author} @{new Date(post.created).toDateString()}</li>
             )
           })}
         </ul>
