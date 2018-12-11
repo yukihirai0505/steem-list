@@ -4,15 +4,20 @@ import PropTypes from 'prop-types'
 
 class Home extends Component {
   static propTypes = {
-    handleLogin: PropTypes.any
+    isLogin: PropTypes.bool,
+    handleLogin: PropTypes.any,
+    handleLogout: PropTypes.any
   }
 
   render() {
-    const { handleLogin } = this.props
+    const { isLogin, handleLogin, handleLogout } = this.props
     return (
       <main>
         <h1>Steem List</h1>
-        <button onClick={() => handleLogin()}>SignIn</button>
+        {isLogin ?
+          <button onClick={() => handleLogout()}>Logout</button> :
+          <button onClick={() => handleLogin()}>SignIn</button>
+        }
       </main>
     )
   }
