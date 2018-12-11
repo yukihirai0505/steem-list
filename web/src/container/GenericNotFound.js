@@ -6,7 +6,9 @@ class GenericNotFound extends Component {
     const { location } = this.props
     console.log(location.pathname)
     return (
-      <main><h1>Not Found</h1></main>
+      <main>
+        <h1>Not Found</h1>
+      </main>
     )
   }
 }

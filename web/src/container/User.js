@@ -6,7 +6,9 @@ class User extends Component {
     const { location } = this.props
     console.log()
     return (
-      <main><h1>{location.pathname.replace('/', '')}</h1></main>
+      <main>
+        <h1>{location.pathname.replace('/', '')}</h1>
+      </main>
     )
   }
 }

@@ -1,25 +1,23 @@
 import React, { Component } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 import Home from './container/Home.js'
-import Article from './container/Article.js'
 import User from './container/User.js'
 import GenericNotFound from './container/GenericNotFound.js'
-import sc2 from 'sc2-sdk'
+import { api } from './config/app'
 import './Custom.css'
+import { Cookie } from './utils/cookie'
+import { createBrowserHistory } from 'history'
+import Authenticate from './container/Authenticate'
+
+const history = createBrowserHistory()
 
 class App extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
       user: undefined,
       result: [],
-      api: sc2.Initialize({
-        app: 'yabami',
-        callbackURL: 'http://localhost:3000',
-        accessToken: 'access_token',
-        scope: ['vote', 'comment']
-      })
+      isLogin: Cookie.get('auth') !== null
     }
   }
 
@@ -37,16 +35,20 @@ class App extends Component {
    - show timeline
    - vote & comment to content
      */
-    // TODO: access token check
-    let accessToken = new URLSearchParams(document.location.search).get(
-      'access_token'
-    )
-    // saveCookie
-    console.log(accessToken)
+    const urlParams = new URLSearchParams(document.location.search)
+    const accessToken = urlParams.get('access_token')
+    // let expiresIn = urlParams.get('expires_in')
+    const username = urlParams.get('username')
+    if (accessToken) {
+      Cookie.set('auth', accessToken, 1)
+      this.setState({ isLogin: true })
+      history.push({
+        pathname: `/@${username}`
+      })
+    }
   }
 
   handleLogin = e => {
-    const { api } = this.state
     //e.preventDefault()
     window.location.href = api.getLoginURL()
   }
@@ -55,12 +57,17 @@ class App extends Component {
     return (
       <div className="App">
         <Switch>
-          <Route exact path="/"
-                 render={(props) => <Home {...props} handleLogin={this.handleLogin}/>}
+          <Route
+            exact
+            path="/"
+            render={props => <Home {...props} handleLogin={this.handleLogin}/>}
           />
-          <Route exact path="/article" component={Article}/>
-          <Route path='/@*' component={User}/>
-          <Route component={GenericNotFound}/>
+          <Authenticate>
+            <Switch>
+              <Route path="/@*" component={User}/>
+              <Route component={GenericNotFound}/>
+            </Switch>
+          </Authenticate>
         </Switch>
       </div>
     )
@@ -68,17 +75,3 @@ class App extends Component {
 }
 
 export default App
-
-
-// handleLogin = e => {
-//   const { api } = this.state
-//   e.preventDefault()
-//   window.location.href = api.getLoginURL()
-// }
-// createList = async () => {
-//   let accessToken = new URLSearchParams(document.location.search).get(
-//     'access_token'
-//   )
-//   console.log(accessToken)
-//   await test(accessToken, 'test')
-// }
