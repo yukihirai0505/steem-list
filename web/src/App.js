@@ -4,7 +4,7 @@ import Home from './container/Home.js'
 import User from './container/User.js'
 import List from './container/List.js'
 import GenericNotFound from './container/GenericNotFound.js'
-import { api } from './config/app'
+import { productBaseUrl, api } from './config/app'
 import './Custom.css'
 import { Cookie } from './utils/cookie'
 import Authenticate from './container/Authenticate'
@@ -35,9 +35,7 @@ class App extends Component {
     if (accessToken) {
       Cookie.set('auth', accessToken, 1)
       this.setUserInfo(username)
-      this.props.history.push({
-        pathname: `/#/${username}`
-      })
+      window.location.href = productBaseUrl
     }
   }
 
@@ -53,13 +51,12 @@ class App extends Component {
   }
 
   handleLogout = e => {
+    const { history } = this.props
     Cookie.delete('auth')
     this.setState({
       isLogin: false
     })
-    this.props.history.push({
-      pathname: `/`
-    })
+    window.location.href = productBaseUrl
   }
 
   render() {
@@ -82,9 +79,12 @@ class App extends Component {
           />
           <Authenticate>
             <Switch>
-              <Route path="/:name(@[a-zA-Z0-9-_\.]+)/:listId" component={List}/>
-              <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User}/>
-              <Route component={GenericNotFound}/>
+              <Route
+                path="/:name(@[a-zA-Z0-9-_\.]+)/:listId"
+                component={List}
+              />
+              <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User} />
+              <Route component={GenericNotFound} />
             </Switch>
           </Authenticate>
         </Switch>

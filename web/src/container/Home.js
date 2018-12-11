@@ -44,7 +44,6 @@ class Home extends Component {
     this.setState({ newListName: e.target.value })
   }
 
-
   async createList(e) {
     e.preventDefault()
     const { newListName } = this.state
@@ -77,7 +76,7 @@ class Home extends Component {
                 value={newListName}
                 onChange={e => this.handleListNameChange(e)}
               />
-              <input type="submit" value="create"/>
+              <input type="submit" value="create" />
             </form>
             <p>Your List</p>
             <ul>
@@ -87,8 +86,8 @@ class Home extends Component {
                 const listName = row[2]
                 return (
                   <li key={listId}>
-                    <Link to={`/${username}/${listId}`}>{listName}{' '}</Link>
-                    <a href="" onClick={(e) => this.removeList(e, listId)}>
+                    <Link to={`/${username}/${listId}`}>{listName} </Link>
+                    <a href="" onClick={e => this.removeList(e, listId)}>
                       x
                     </a>
                   </li>

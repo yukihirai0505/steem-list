@@ -10,7 +10,9 @@ export const getList = async username => {
 }
 
 export const getListMembers = async (username, listId) => {
-  const response = await fetch(`${baseUrl}?action=show-list-member&username=${username}&listId=${listId}`)
+  const response = await fetch(
+    `${baseUrl}?action=show-list-member&username=${username}&listId=${listId}`
+  )
   return await response.json()
 }
 
