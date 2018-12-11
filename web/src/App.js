@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 import Home from './container/Home.js'
 import User from './container/User.js'
+import List from './container/List.js'
 import GenericNotFound from './container/GenericNotFound.js'
 import { api } from './config/app'
 import './Custom.css'
 import { Cookie } from './utils/cookie'
-import { createBrowserHistory } from 'history'
 import Authenticate from './container/Authenticate'
-
-const history = createBrowserHistory()
+import { withRouter } from 'react-router'
 
 class App extends Component {
   constructor(props) {
@@ -37,7 +36,7 @@ class App extends Component {
     if (accessToken) {
       Cookie.set('auth', accessToken, 1)
       this.setUserInfo(username)
-      history.push({
+      this.props.history.push({
         pathname: `/`
       })
     }
@@ -60,7 +59,7 @@ class App extends Component {
     this.setState({
       isLogin: false
     })
-    history.push({
+    this.props.history.push({
       pathname: `/`
     })
   }
@@ -73,13 +72,21 @@ class App extends Component {
           <Route
             exact
             path="/"
-            render={props => <Home {...props} isLogin={isLogin} username={username} handleLogin={this.handleLogin}
-                                   handleLogout={this.handleLogout}/>}
+            render={props => (
+              <Home
+                {...props}
+                isLogin={isLogin}
+                username={username}
+                handleLogin={this.handleLogin}
+                handleLogout={this.handleLogout}
+              />
+            )}
           />
           <Authenticate>
             <Switch>
-              <Route path="/@*" component={User}/>
-              <Route component={GenericNotFound}/>
+              <Route path="/:name(@[a-zA-Z0-9-_\.]+)/:listId" component={List} />
+              <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User} />
+              <Route component={GenericNotFound} />
             </Switch>
           </Authenticate>
         </Switch>
@@ -88,4 +95,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default withRouter(App)

@@ -1,9 +1,7 @@
-import React, { Component, Fragment } from 'react'
-import { Route, Link } from 'react-router-dom'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Cookie } from '../utils/cookie'
-import { api } from '../config/app'
 import { getList, removeList, createList } from '../utils/api'
+import { withRouter } from 'react-router'
 
 class Home extends Component {
   static propTypes = {
@@ -61,29 +59,41 @@ class Home extends Component {
     return (
       <main>
         <h1>Steem List</h1>
-        {isLogin ?
+        {isLogin ? (
           <div>
             <button onClick={() => handleLogout()}>Logout</button>
             <form action="#" onSubmit={e => this.createList(e)}>
-              New List Name: <input type="text" value={newListName} onChange={e => this.handleListNameChange(e)}/>
+              New List Name:{' '}
+              <input
+                type="text"
+                value={newListName}
+                onChange={e => this.handleListNameChange(e)}
+              />
               <input type="submit" value="create"/>
             </form>
             <p>Your List</p>
             <ul>
               {list.map((row, key) => {
                 const listId = row[0]
+                const username = row[1]
                 const listName = row[2]
                 return (
-                  <li key={listId}>{listName} <a href='#' onClick={() => this.removeList(listId)}>x</a></li>
+                  <li key={listId}>
+                    <a href={`/#/${username}/${listId}`}>{listName}{' '}</a>
+                    <a href="#" onClick={() => this.removeList(listId)}>
+                      x
+                    </a>
+                  </li>
                 )
               })}
             </ul>
-          </div> :
+          </div>
+        ) : (
           <button onClick={() => handleLogin()}>SignIn</button>
-        }
+        )}
       </main>
     )
   }
 }
 
-export default Home
+export default withRouter(Home)

@@ -3,7 +3,9 @@ import { Cookie } from './cookie'
 const baseUrl = `https://script.google.com/macros/s/AKfycbwpr0c-AU1ANhlmCVk0FkFAcfZWLAMWiZNMwDgRKbMbxzXVInI-/exec`
 
 export const getList = async username => {
-  const response = await fetch(`${baseUrl}?action=show-all-list&param=${username}`)
+  const response = await fetch(
+    `${baseUrl}?action=show-all-list&param=${username}`
+  )
   return await response.json()
 }
 
