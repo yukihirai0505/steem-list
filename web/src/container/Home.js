@@ -19,7 +19,11 @@ class Home extends Component {
     }
   }
 
-  async setList() {
+  async componentDidMount() {
+    await this.fetchList()
+  }
+
+  async fetchList() {
     const { list } = this.state
     const { username } = this.props
     if (username && list.length === 0) {
@@ -33,29 +37,24 @@ class Home extends Component {
     this.setState({ newListName: e.target.value })
   }
 
-  clearList() {
-    this.setState({
-      list: []
-    })
-  }
 
   async createList(e) {
     e.preventDefault()
     const { newListName } = this.state
     await createList(newListName)
-    this.clearList()
+    await this.fetchList()
   }
 
-  async removeList(listId) {
-    console.log(listId)
+  async removeList(e, listId) {
+    e.preventDefault()
     await removeList(listId)
-    this.clearList()
+    await this.fetchList()
   }
 
   render() {
     const { list, newListName } = this.state
     const { isLogin, handleLogin, handleLogout } = this.props
-    this.setList()
+    this.fetchList()
     return (
       <main>
         <h1>Steem List</h1>
@@ -80,7 +79,7 @@ class Home extends Component {
                 return (
                   <li key={listId}>
                     <a href={`/#/${username}/${listId}`}>{listName}{' '}</a>
-                    <a href="#" onClick={() => this.removeList(listId)}>
+                    <a href="" onClick={(e) => this.removeList(e, listId)}>
                       x
                     </a>
                   </li>
