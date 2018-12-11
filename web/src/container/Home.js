@@ -7,9 +7,7 @@ import { Link } from 'react-router-dom'
 class Home extends Component {
   static propTypes = {
     username: PropTypes.string,
-    isLogin: PropTypes.bool,
-    handleLogin: PropTypes.any,
-    handleLogout: PropTypes.any
+    isLogin: PropTypes.bool
   }
 
   constructor(props) {
@@ -59,16 +57,15 @@ class Home extends Component {
 
   render() {
     const { list, newListName, doneFirstFetchList } = this.state
-    const { isLogin, handleLogin, handleLogout, username } = this.props
+    const { isLogin, username } = this.props
     if (!doneFirstFetchList && username) {
       this.fetchList()
     }
     return (
       <main>
         <h1>Steem List</h1>
-        {isLogin ? (
+        {isLogin && (
           <div>
-            <button onClick={() => handleLogout()}>Logout</button>
             <form action="#" onSubmit={e => this.createList(e)}>
               New List Name:{' '}
               <input
@@ -95,8 +92,6 @@ class Home extends Component {
               })}
             </ul>
           </div>
-        ) : (
-          <button onClick={() => handleLogin()}>SignIn</button>
         )}
       </main>
     )

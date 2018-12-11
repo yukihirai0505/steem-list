@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Home from './container/Home.js'
 import User from './container/User.js'
+import Header from './container/Header.js'
 import List from './container/List.js'
 import GenericNotFound from './container/GenericNotFound.js'
 import { productBaseUrl, api } from './config/app'
@@ -62,32 +63,38 @@ class App extends Component {
   render() {
     const { username, isLogin } = this.state
     return (
-      <div className="App">
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={props => (
-              <Home
-                {...props}
-                isLogin={isLogin}
-                username={username}
-                handleLogin={this.handleLogin}
-                handleLogout={this.handleLogout}
-              />
-            )}
-          />
-          <Authenticate>
-            <Switch>
-              <Route
-                path="/:name(@[a-zA-Z0-9-_\.]+)/:listId"
-                component={List}
-              />
-              <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User} />
-              <Route component={GenericNotFound} />
-            </Switch>
-          </Authenticate>
-        </Switch>
+      <div>
+        <Header
+          isLogin={isLogin}
+          username={username}
+          handleLogin={this.handleLogin}
+          handleLogout={this.handleLogout}
+        />
+        <div className='content'>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <Home
+                  {...props}
+                  isLogin={isLogin}
+                  username={username}
+                />
+              )}
+            />
+            <Authenticate>
+              <Switch>
+                <Route
+                  path="/:name(@[a-zA-Z0-9-_\.]+)/:listId"
+                  component={List}
+                />
+                <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User}/>
+                <Route component={GenericNotFound}/>
+              </Switch>
+            </Authenticate>
+          </Switch>
+        </div>
       </div>
     )
   }
