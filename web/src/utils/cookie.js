@@ -21,6 +21,6 @@ export class Cookie {
   }
 
   static delete(name) {
-    document.cookie = name + '=; Max-Age=-99999999;'
+    document.cookie = name + '=; path=/; Max-Age=-99999999;'
   }
 }
