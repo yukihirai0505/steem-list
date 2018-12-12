@@ -83,12 +83,12 @@ class App extends Component {
                 />
               )}
             />
+            <Route
+              path="/:name(@[a-zA-Z0-9-_\.]+)/:listId"
+              component={List}
+            />
             <Authenticate>
               <Switch>
-                <Route
-                  path="/:name(@[a-zA-Z0-9-_\.]+)/:listId"
-                  component={List}
-                />
                 <Route path="/:name(@[a-zA-Z0-9-_\.]+)" component={User}/>
                 <Route component={GenericNotFound}/>
               </Switch>

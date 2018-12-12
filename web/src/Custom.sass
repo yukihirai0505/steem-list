@@ -1,5 +1,42 @@
 body
   background-color: #e6ecf0
+  color: #14171a
+  font-size: 14px
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+  line-height: 20px
+
+ul, ol
+  margin: 0
+  list-style: none
+  padding: 0
+
+ol
+  display: block
+  list-style: decimal
+  margin-left: 20px
+
+li
+  text-align: inherit
+  display: list-item
+
+img
+  border: 0
+a
+  color: #1c94e0
+  text-decoration: none
+  background: transparent
+
+a, a:hover, a:focus, a:active
+  color: #1DA1F2
+
+a.account-group:hover
+  color: #1DA1F2
+  text-decoration: underline
+  .fullname
+    color: #1DA1F2
+
+blockquote, dl, dd, h1, h2, h3, h4, h5, h6, figure, p, pre
+  margin: 0
 
 .toolbar
   backface-visibility: hidden
@@ -8,6 +45,7 @@ body
   top: 0
   right: 0
   left: 0
+  z-index: 1
 
 .global-nav
   border-bottom: 1px solid rgba(0, 0, 0, 0.25)
@@ -36,8 +74,8 @@ body
     position: relative
     z-index: 5
 
-.nav.right-actions>li+li
-    margin-left: 16px
+.nav.right-actions > li + li
+  margin-left: 16px
 
 .nav-extras
   align-items: center
@@ -46,17 +84,10 @@ body
 
 .content
   padding: 46px 0 0
+  margin-left: 58px
 
 .nav
   text-align: left
-
-ul
-  margin: 0
-  list-style: none
-  padding: 0
-
-li
-  display: list-item
 
 .btn
   background-color: #4AB3F4
@@ -77,3 +108,103 @@ li
   text-align: center
   white-space: nowrap
 
+.content-main
+  width: 590px
+
+.stream, .stream-container, .stream-items
+  position: relative
+  margin-left: 0
+  list-style: none
+
+.stream-item
+  position: relative
+  .content
+    padding: 0
+    margin-left: 58px
+
+.stream-item:before, .stream-item:after
+  content: " "
+  display: table
+
+.stream-item:after
+  clear: both
+
+.stream-item:not(.no-header-background-module)
+  background: #fff
+  border-left: 1px solid #e6ecf0
+  border-right: 1px solid #e6ecf0
+  background-clip: padding-box
+
+.tweet
+  border-bottom: 1px solid #e6ecf0
+  cursor: pointer
+  .time
+    margin-right: 5px
+    color: #657786
+  p
+    word-wrap: break-word
+    font-size: 14px
+    line-height: 20px
+    font-weight: normal
+
+.tweet > .context
+  margin-left: 58px
+
+.account, .tweet, .app, .RtbAd-container
+  position: relative
+  min-height: 51px
+  padding: 9px 12px
+  border-bottom: 1px solid #e6ecf0
+
+.stream-item-header
+  display: flex
+  .account-group
+    color: #14171a
+    display: inline-flex
+    flex-shrink: 1
+    overflow: hidden
+    margin-right: 5px
+    .username
+      display: flex
+      max-width: 100%
+  .avatar
+    float: left
+    margin-top: 3px
+    margin-left: -58px
+    position: absolute
+
+.fullname
+  word-break: break-all
+  color: #14171a
+  font-size: 14px
+  font-weight: bold
+
+.avatar
+  width: 48px
+  height: 48px
+  border-radius: 50%
+
+.media-container
+  margin-top: 10px
+
+.adaptive-media
+  border-radius: 12px
+  display: inline-block
+  overflow: hidden
+  position: relative
+  vertical-align: top
+  width: 100%
+  max-height: 379.5px
+  max-width: 506px
+  img
+    top: -0px
+    width: 100%
+
+.adaptive-media.is-square
+  max-height: 506px
+
+@media screen and (max-width: 768px)
+  .content
+    margin: 0
+  .content-main
+    width: 100%

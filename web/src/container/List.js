@@ -101,7 +101,7 @@ class List extends Component {
               value={newMemberName}
               onChange={e => this.handleMemberNameChange(e)}
             />
-            <input type="submit" value="create" />
+            <input type="submit" value="create"/>
           </form>
         )}
         <ul>
@@ -119,21 +119,47 @@ class List extends Component {
           })}
         </ul>
         <p>Timeline</p>
-        <ul>
-          {timeline.map((post, key) => {
-            /**
-             const json = JSON.parse(post.json_metadata);
-             const image = json.image ? json.image[0] : '';
-             */
-            console.log(post)
-            return (
-              <li key={key}>
-                {post.title} by {post.author} @
-                {new Date(post.created).toDateString()}
-              </li>
-            )
-          })}
-        </ul>
+        <div className='content-main'>
+          <div className='stream-container'>
+            <div className='stream'>
+              <ol className='stream-items'>
+                {timeline.map((post, key) => {
+                  const json = JSON.parse(post.json_metadata)
+                  const image = json.image ? json.image[0] : ''
+                  console.log(post)
+                  console.log(json)
+                  return (
+                    <li key={key} className='stream-item'>
+                      <div className='tweet'>
+                        <div className='context'/>
+                        <div className='content'>
+                          <div className='stream-item-header'>
+                            <a href={`https://steemit.com/@${post.author}`} className='account-group' target='_blank'>
+                              <img src={`https://steemitimages.com/u/${post.author}/avatar`}
+                                   alt="" className='avatar'/>
+                              <span className='username'>
+                                <strong className='fullname'>{post.author}</strong>
+                              </span>
+                            </a>
+                            <div className='time'>{new Date(post.created).toDateString()}</div>
+                          </div>
+                          <div>
+                            <p>{post.title}</p>
+                            <div className='media-container'>
+                              <div className='adaptive-media is-square'>
+                                <img src={image} alt=""/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ol>
+            </div>
+          </div>
+        </div>
       </main>
     )
   }
