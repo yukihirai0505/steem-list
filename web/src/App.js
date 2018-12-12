@@ -80,6 +80,7 @@ class App extends Component {
                   {...props}
                   isLogin={isLogin}
                   username={username}
+                  handleLogin={this.handleLogin}
                 />
               )}
             />

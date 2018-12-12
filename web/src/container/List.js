@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
 import { getListMembers, addListMember, removeListMember } from '../utils/api'
 import { Client } from 'dsteem'
 import { Cookie } from '../utils/cookie'
 import { api } from '../config/app'
 import ReactMarkdown from 'react-markdown'
+import { profileLink } from '../utils/steem'
 
 const client = new Client('https://api.steemit.com')
 
@@ -13,6 +14,7 @@ class List extends Component {
     super(props)
     this.state = {
       timeline: [],
+      list: {},
       members: [],
       newMemberName: '',
       username: undefined,
@@ -39,9 +41,10 @@ class List extends Component {
     const { location, match } = this.props
     const { name, listId } = match.params
     if (listId) {
-      const members = (await getListMembers(name, listId)).data
+      const { list, members } = (await getListMembers(name, listId)).data
       if (Array.isArray(members)) {
         this.setState({
+          list,
           members
         })
       }
@@ -90,7 +93,7 @@ class List extends Component {
   }
 
   render() {
-    const { username, members, newMemberName, timeline } = this.state
+    const { username, members, newMemberName, timeline, list } = this.state
     const { history, match } = this.props
     const { name } = match.params
     const isMe = name === username
@@ -107,7 +110,7 @@ class List extends Component {
             <input type="submit" value="add"/>
           </form>
         )}
-        {members.map((member, key) => {
+        list members: {members.map((member, key) => {
           const listId = member[0]
           const username = member[1]
           return (
@@ -122,7 +125,10 @@ class List extends Component {
         <div className='content-main'>
           <div className='content-header'>
             <div className='header-inner'>
-              <h2 id="content-main-heading">Timeline</h2>
+              <h2
+                id="content-main-heading">{list && list.name ?
+                <Fragment>{list.name} by <a href={profileLink(list.username)} target='_blank'>{list.username}</a></Fragment>
+                : 'Timeline'}</h2>
             </div>
           </div>
           <div className='stream-container'>
@@ -138,7 +144,7 @@ class List extends Component {
                         <div className='context'/>
                         <div className='content'>
                           <div className='stream-item-header'>
-                            <a href={`https://steemit.com/@${post.author}`} className='account-group' target='_blank'>
+                            <a href={profileLink(`@${post.author}`)} className='account-group' target='_blank'>
                               <img src={`https://steemitimages.com/u/${post.author}/avatar`}
                                    alt="" className='avatar'/>
                               <span className='username'>

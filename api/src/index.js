@@ -22,10 +22,17 @@ global.doGet = e => {
       const { username, listId } = e.parameter
       const listIndex = findByListIdAndUserName(listId, username)
       if (listIndex !== undefined) {
-        response = listMemberSheet
-          .getRange(2, 1, listMemberSheet.getLastRow(), 3)
-          .getValues()
-          .filter(data => data[0] === listId)
+        const list = listSheet.getRange(listIndex + 2, 1, 1, 3).getValues()[0]
+        response = {
+          list: {
+            username: list[1],
+            name: list[2]
+          },
+          members: listMemberSheet
+            .getRange(2, 1, listMemberSheet.getLastRow(), 3)
+            .getValues()
+            .filter(data => data[0] === listId)
+        }
       }
       break
     }

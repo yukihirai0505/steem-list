@@ -17,6 +17,16 @@ class Header extends Component {
         <div className='global-nav'>
           <div className='global-nav-inner'>
             <div className='container'>
+              <div role='navigation' style={{ display: 'inline-block' }}>
+                <ul className='nav' id='global-actions'>
+                  <li id="global-nav-home" className="home active new" data-global-action="home">
+                    <a className="js-nav js-tooltip js-dynamic-tooltip" data-placement="bottom" href="/">
+                      <i className="fa fa-home"/>
+                      <span className="text" aria-hidden="true">Home</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
               <div className='pull-right nav-extras'>
                 <ul className='nav right-actions'>
                   {isLogin ?

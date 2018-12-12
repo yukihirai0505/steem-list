@@ -70,6 +70,63 @@ button {
   background: #fff;
   height: 46px; }
 
+.nav {
+  text-align: left; }
+  .nav li {
+    position: relative; }
+    .nav li a {
+      position: relative; }
+
+.nav > li {
+  color: #66757f; }
+
+.global-nav [role=navigation], .nav, .nav > li {
+  float: left; }
+
+.global-nav #global-actions li span.text {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px); }
+
+#global-actions > li {
+  height: 46px;
+  overflow: hidden; }
+
+.nav#global-actions > li i {
+  float: left;
+  margin: 11px 0 0 10px;
+  width: 23px;
+  height: 23px;
+  font-size: 21px;
+  line-height: 1; }
+
+#global-actions > li:hover > a, #global-actions > li.active > a {
+  height: 44px; }
+
+#global-actions > li > a {
+  border-bottom-color: #1DA1F2; }
+
+#global-actions > li > a {
+  border-bottom: 2px solid #1c94e0;
+  transition: all .15s ease-in-out; }
+
+.nav .active a {
+  color: inherit;
+  background-color: transparent; }
+
+.nav > li > a {
+  color: inherit;
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  height: 46px;
+  line-height: 1;
+  padding: 0 14px 0 4px; }
+
 .pull-right {
   float: right;
   text-align: left; }
