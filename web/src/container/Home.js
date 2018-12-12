@@ -63,7 +63,6 @@ class Home extends Component {
     }
     return (
       <main>
-        <h1>Steem List</h1>
         {isLogin && (
           <div>
             <form action="#" onSubmit={e => this.createList(e)}>
@@ -73,24 +72,38 @@ class Home extends Component {
                 value={newListName}
                 onChange={e => this.handleListNameChange(e)}
               />
-              <input type="submit" value="create" />
+              <input type="submit" value="create"/>
             </form>
-            <p>Your List</p>
-            <ul>
-              {list.map((row, key) => {
-                const listId = row[0]
-                const username = row[1]
-                const listName = row[2]
-                return (
-                  <li key={listId}>
-                    <Link to={`/${username}/${listId}`}>{listName} </Link>
-                    <a href="" onClick={e => this.removeList(e, listId)}>
-                      x
-                    </a>
-                  </li>
-                )
-              })}
-            </ul>
+            <div className='content-main'>
+              <div className='list-heading'>
+                <div className='list-heading-content'>
+                  <h2 className="list-heading-title">Lists</h2>
+                </div>
+              </div>
+              <div className='list'>
+                <div className='list-items'>
+                  {list.map((row, key) => {
+                    const listId = row[0]
+                    const username = row[1]
+                    const listName = row[2]
+                    return (
+                      <div key={listId} className='grid'>
+                        <div className='grid-cell'>
+                          <div className='list-item'>
+                           <span className='list-item-name'>
+                            <Link to={`/${username}/${listId}`}>{listName} </Link>
+                             </span>
+                            <a href="" onClick={e => this.removeList(e, listId)}>
+                              x
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </main>
